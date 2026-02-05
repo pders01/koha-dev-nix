@@ -1,8 +1,15 @@
 #!/usr/bin/env perl
 use strict;
 use warnings;
+use FindBin qw($RealBin);
 
 my %missing;
+
+# Use KOHA_SRC env var or default to ../koha relative to script location
+my $koha_src = $ENV{KOHA_SRC} || "$RealBin/../koha";
+my $stubs_dir = "$RealBin/stubs";
+
+die "Koha source not found at $koha_src\n" unless -d "$koha_src/Koha";
 
 # Try loading many Koha modules and capture all missing deps
 my @mods = qw(
@@ -17,7 +24,7 @@ my @mods = qw(
 );
 
 for my $mod (@mods) {
-  my $output = `perl -I../koha -Istubs -e "use $mod" 2>&1`;
+  my $output = `perl -I"$koha_src" -I"$stubs_dir" -e "use $mod" 2>&1`;
   while ($output =~ /Can't locate (\S+)\.pm/g) {
     my $m = $1;
     $m =~ s/\//\:\:/g;

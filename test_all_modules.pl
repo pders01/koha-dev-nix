@@ -2,11 +2,18 @@
 use strict;
 use warnings;
 use File::Find;
+use FindBin qw($RealBin);
 
 my %missing;
 my %failed;
 my $total = 0;
 my $ok = 0;
+
+# Use KOHA_SRC env var or default to ../koha relative to script location
+my $koha_src = $ENV{KOHA_SRC} || "$RealBin/../koha";
+my $stubs_dir = "$RealBin/stubs";
+
+die "Koha source not found at $koha_src\n" unless -d "$koha_src/Koha";
 
 # Find all .pm files in Koha and C4
 my @files;
@@ -14,18 +21,18 @@ find(sub {
     return unless /\.pm$/;
     return if $File::Find::dir =~ /\.git|blib|t\//;
     push @files, $File::Find::name;
-}, '../koha/Koha', '../koha/C4');
+}, "$koha_src/Koha", "$koha_src/C4");
 
 for my $file (@files) {
     # Convert file path to module name
     my $mod = $file;
-    $mod =~ s{^\.\./koha/}{};
+    $mod =~ s{^\Q$koha_src/\E}{};
     $mod =~ s{/}{::}g;
     $mod =~ s{\.pm$}{};
 
     $total++;
 
-    my $output = `perl -I../koha -Istubs -e "use $mod" 2>&1`;
+    my $output = `perl -I"$koha_src" -I"$stubs_dir" -e "use $mod" 2>&1`;
 
     if ($? == 0) {
         $ok++;

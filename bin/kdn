@@ -242,10 +242,16 @@ while [ $# -gt 0 ]; do
             exit 0
             ;;
         --branch)
+            if [ -z "$2" ] || [[ "$2" == -* ]]; then
+                error "--branch requires an argument"
+            fi
             KOHA_BRANCH="$2"
             shift 2
             ;;
         --koha-src)
+            if [ -z "$2" ] || [[ "$2" == -* ]]; then
+                error "--koha-src requires a path argument"
+            fi
             KOHA_SRC="$2"
             shift 2
             ;;
@@ -256,6 +262,9 @@ while [ $# -gt 0 ]; do
         check)
             COMMAND="check"
             shift
+            if [ $# -eq 0 ] || [[ "$1" == -* ]]; then
+                error "check requires a module name\nUsage: kdn check <Module::Name>"
+            fi
             COMMAND_ARG="$1"
             shift
             ;;

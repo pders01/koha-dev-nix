@@ -255,8 +255,12 @@
 
             export -f koha-test koha-check koha-missing koha-stubs
 
-            # Custom prompt
-            export PS1="\[\033[0;36m\][koha-dev]\[\033[0m\] \w $ "
+            # Custom prompt (bash/zsh compatible)
+            if [ -n "$BASH_VERSION" ]; then
+              export PS1="\[\033[0;36m\][koha-dev]\[\033[0m\] \w $ "
+            elif [ -n "$ZSH_VERSION" ]; then
+              export PS1="%F{cyan}[koha-dev]%f %~ $ "
+            fi
           '';
         };
       }
