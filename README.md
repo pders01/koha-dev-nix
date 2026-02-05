@@ -236,15 +236,61 @@ Or configure Zed to use the nix environment in `settings.json`:
 
 ## With direnv (Recommended)
 
-For automatic shell activation:
+direnv automatically loads the nix environment when you enter the directory. This means **IDE terminals also get the environment** - no need to manually run `kdn shell`.
+
+### Install direnv
 
 ```bash
-# In koha-dev-nix directory
+# macOS
+brew install direnv
+
+# Or with nix
+nix profile install nixpkgs#direnv
+```
+
+### Configure your shell
+
+Add to `~/.bashrc`:
+```bash
+eval "$(direnv hook bash)"
+```
+
+Or `~/.zshrc`:
+```bash
+eval "$(direnv hook zsh)"
+```
+
+### Enable in koha-dev-nix
+
+```bash
+cd $KDN_HOME
 echo "use flake" > .envrc
 direnv allow
 ```
 
-Now the environment activates automatically when you `cd` into the directory.
+Now the environment activates automatically when you `cd` into the directory, including IDE terminals.
+
+### Editor plugins (recommended)
+
+For full IDE integration, install the direnv plugin for your editor:
+
+| Editor | Plugin |
+|--------|--------|
+| **VS Code** | [direnv extension](https://marketplace.visualstudio.com/items?itemName=mkhl.direnv) |
+| **Neovim** | [direnv.nvim](https://github.com/direnv/direnv.vim) |
+| **Zed** | Built-in support |
+| **Emacs** | [envrc](https://github.com/purcell/envrc) |
+
+### Faster loading with nix-direnv (optional)
+
+`nix-direnv` caches the environment for instant loading:
+
+```bash
+nix profile install nixpkgs#nix-direnv
+
+# Add to ~/.config/direnv/direnvrc
+echo 'source $HOME/.nix-profile/share/nix-direnv/direnvrc' >> ~/.config/direnv/direnvrc
+```
 
 ## Directory Structure
 
