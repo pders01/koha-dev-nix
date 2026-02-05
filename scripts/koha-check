@@ -12,6 +12,13 @@ if [ -z "$1" ]; then
   exit 1
 fi
 
+# Validate module name (only allow valid Perl module characters)
+if [[ ! "$1" =~ ^[A-Za-z_][A-Za-z0-9_]*(::[A-Za-z_][A-Za-z0-9_]*)*$ ]]; then
+  echo -e "\033[0;31mError: Invalid module name '$1'\033[0m"
+  echo "Module names must be valid Perl identifiers (e.g., C4::Biblio, Koha::Patrons)"
+  exit 1
+fi
+
 echo -e "\033[0;34mTesting $1...\033[0m"
 output=$(perl -I"$KOHA_DEV_NIX/stubs" -I"$KOHA_SRC" -e "use $1; print \"OK\n\"" 2>&1)
 exit_code=$?

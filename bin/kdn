@@ -19,6 +19,7 @@ NC='\033[0m'
 # Defaults - reuse SYNC_REPO from ktd if available
 KOHA_SRC="${KOHA_SRC:-$SYNC_REPO}"
 KOHA_BRANCH=""
+# Note: NIX_FLAGS is intentionally unquoted when used to allow word splitting
 NIX_FLAGS="--extra-experimental-features nix-command --extra-experimental-features flakes"
 
 usage() {
@@ -177,6 +178,11 @@ cmd_check() {
 
     if [ -z "$module" ]; then
         error "Usage: kdn check <Module::Name>\nExample: kdn check C4::Biblio"
+    fi
+
+    # Validate module name (only allow valid Perl module characters)
+    if [[ ! "$module" =~ ^[A-Za-z_][A-Za-z0-9_]*(::[A-Za-z_][A-Za-z0-9_]*)*$ ]]; then
+        error "Invalid module name '$module'\nModule names must be valid Perl identifiers (e.g., C4::Biblio)"
     fi
 
     check_requirements
