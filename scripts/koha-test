@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+set -e
+
+if [ -z "$KOHA_DEV_NIX" ]; then
+  echo "Error: Not in koha-dev-nix environment. Run 'kdn shell' first." >&2
+  exit 1
+fi
+
+echo -e "\033[0;34mRunning full module test...\033[0m"
+cd "$KOHA_DEV_NIX" && perl t/test_all_modules.pl

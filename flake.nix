@@ -221,6 +221,9 @@
             # Store the dev directory for commands
             export KOHA_DEV_NIX="$PWD"
 
+            # Add scripts to PATH
+            export PATH="$PWD/scripts:$PATH"
+
             # Colors
             RED='\033[0;31m'
             GREEN='\033[0;32m'
@@ -245,46 +248,6 @@
             echo -e "  ''${YELLOW}koha-yarn''${NC}        Run yarn in Koha directory (e.g., koha-yarn build)"
             echo ""
 
-            # Shell functions
-            koha-test() {
-              echo -e "''${BLUE}Running full module test...''${NC}"
-              cd "$KOHA_DEV_NIX" && perl t/test_all_modules.pl
-            }
-
-            koha-check() {
-              if [ -z "$1" ]; then
-                echo -e "''${RED}Usage: koha-check <Module::Name>''${NC}"
-                echo "Example: koha-check C4::Biblio"
-                return 1
-              fi
-              echo -e "''${BLUE}Testing $1...''${NC}"
-              local output
-              output=$(perl -I"$KOHA_DEV_NIX/stubs" -I"$KOHA_SRC" -e "use $1; print \"OK\n\"" 2>&1)
-              local exit_code=$?
-              if [ $exit_code -eq 0 ]; then
-                echo -e "''${GREEN}OK''${NC}: $1 loaded successfully"
-              else
-                echo -e "''${RED}FAILED''${NC}: $1 could not be loaded"
-                echo "$output" | grep -v "unable to locate Koha configuration" | grep -v "^Use of uninitialized value" | head -10
-              fi
-              return $exit_code
-            }
-
-            koha-missing() {
-              echo -e "''${BLUE}Finding missing dependencies...''${NC}"
-              cd "$KOHA_DEV_NIX" && perl t/find_missing.pl
-            }
-
-            koha-stubs() {
-              echo -e "''${BOLD}Stub modules in $KOHA_DEV_NIX/stubs/:''${NC}"
-              find "$KOHA_DEV_NIX/stubs" -name "*.pm" | sed "s|$KOHA_DEV_NIX/stubs/||" | sed 's|/|::|g' | sed 's|\.pm$||' | sort
-            }
-
-            koha-yarn() {
-              cd "$KOHA_SRC" && yarn "$@"
-            }
-
-            export -f koha-test koha-check koha-missing koha-stubs koha-yarn
           '';
         };
       }

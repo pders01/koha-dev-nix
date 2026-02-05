@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+set -e
+
+if [ -z "$KOHA_DEV_NIX" ]; then
+  echo "Error: Not in koha-dev-nix environment. Run 'kdn shell' first." >&2
+  exit 1
+fi
+
+echo -e "\033[1mStub modules in $KOHA_DEV_NIX/stubs/:\033[0m"
+find "$KOHA_DEV_NIX/stubs" -name "*.pm" | sed "s|$KOHA_DEV_NIX/stubs/||" | sed 's|/|::|g' | sed 's|\.pm$||' | sort

@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+set -e
+
+if [ -z "$KOHA_SRC" ]; then
+  echo "Error: KOHA_SRC is not set. Run 'kdn shell' first." >&2
+  exit 1
+fi
+
+cd "$KOHA_SRC" && yarn "$@"

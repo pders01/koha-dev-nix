@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+set -e
+
+if [ -z "$KOHA_DEV_NIX" ]; then
+  echo "Error: Not in koha-dev-nix environment. Run 'kdn shell' first." >&2
+  exit 1
+fi
+
+if [ -z "$1" ]; then
+  echo -e "\033[0;31mUsage: koha-check <Module::Name>\033[0m"
+  echo "Example: koha-check C4::Biblio"
+  exit 1
+fi
+
+echo -e "\033[0;34mTesting $1...\033[0m"
+output=$(perl -I"$KOHA_DEV_NIX/stubs" -I"$KOHA_SRC" -e "use $1; print \"OK\n\"" 2>&1)
+exit_code=$?
+
+if [ $exit_code -eq 0 ]; then
+  echo -e "\033[0;32mOK\033[0m: $1 loaded successfully"
+else
+  echo -e "\033[0;31mFAILED\033[0m: $1 could not be loaded"
+  echo "$output" | grep -v "unable to locate Koha configuration" | grep -v "^Use of uninitialized value" | head -10
+fi
+exit $exit_code

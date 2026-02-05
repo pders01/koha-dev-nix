@@ -299,6 +299,7 @@ $PROJECTS_DIR/
 ├── koha/              # Koha source (KOHA_SRC)
 └── koha-dev-nix/      # This repo (KDN_HOME)
     ├── bin/kdn        # CLI wrapper
+    ├── scripts/       # Shell commands (koha-test, koha-check, etc.)
     ├── flake.nix      # Nix flake with Perl dependencies
     ├── flake.lock     # Locked dependency versions
     ├── stubs/         # Stub modules for packages not in nixpkgs
