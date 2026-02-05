@@ -10,6 +10,7 @@ This is **not** a replacement for [koha-testing-docker](https://gitlab.com/koha-
 
 - Perl environment with Koha's dependencies resolved
 - PerlNavigator LSP integration for IDE support
+- Node.js/Yarn for frontend development (Vue, SCSS, TypeScript)
 - Cross-platform (macOS, Linux, WSL)
 - Developer experience with helpful shell commands
 
@@ -125,6 +126,7 @@ Once inside `nix develop`:
 | `koha-check C4::Biblio` | Test if a specific module loads |
 | `koha-missing` | Find missing external dependencies |
 | `koha-stubs` | List all stub modules |
+| `koha-yarn <cmd>` | Run yarn in Koha directory (e.g., `koha-yarn build`) |
 
 ## Verify Installation
 
@@ -137,6 +139,33 @@ koha-check Koha::Patrons
 koha-check C4::Biblio
 koha-check Koha::REST::V1
 ```
+
+## Frontend Development
+
+The environment includes Node.js 20, Yarn, TypeScript, and typescript-language-server for frontend development.
+
+### Install dependencies
+
+```bash
+koha-yarn install
+```
+
+### Available yarn scripts
+
+```bash
+koha-yarn build              # Build all assets (CSS + JS + API bundle)
+koha-yarn build:prod         # Production build
+koha-yarn css:build          # Build SCSS
+koha-yarn css:watch          # Watch and rebuild CSS on changes
+koha-yarn js:build           # Build Vue components (rspack)
+koha-yarn js:watch           # Watch and rebuild JS on changes
+koha-yarn cypress            # Run Cypress tests
+koha-yarn prettier           # Run Prettier
+```
+
+### TypeScript support
+
+TypeScript and `typescript-language-server` are included for Vue component development and type checking. Your editor should automatically pick up the language server when opened via `kdn code`, `kdn nvim`, or `kdn zed`.
 
 ## Editor Setup
 
