@@ -1,0 +1,12 @@
+# Nix
+result
+result-*
+
+# Editor
+.idea/
+*.swp
+*.swo
+*~
+
+# direnv
+.direnv/
