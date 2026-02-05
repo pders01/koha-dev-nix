@@ -278,7 +278,7 @@ cmd_status() {
     check_requirements
 
     echo -e "${CYAN}╭─────────────────────────────────────────────╮${NC}"
-    echo -e "${CYAN}│${NC}  ${BOLD}Koha Development Nix Environment${NC}          ${CYAN}│${NC}"
+    echo -e "${CYAN}│${NC}  ${BOLD}Koha Development Nix Environment${NC}           ${CYAN}│${NC}"
     echo -e "${CYAN}╰─────────────────────────────────────────────╯${NC}"
     echo
     echo -e "${BOLD}Paths:${NC}"
