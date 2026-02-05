@@ -19,9 +19,12 @@ die "Koha source not found at $koha_src\n" unless -d "$koha_src/Koha";
 my @files;
 find(sub {
     return unless /\.pm$/;
-    return if $File::Find::dir =~ /\.git|blib|t\//;
+    return if $File::Find::dir =~ /\/\.git|\/blib\/|\/t\//;
     push @files, $File::Find::name;
 }, "$koha_src/Koha", "$koha_src/C4");
+
+my $file_count = scalar(@files);
+my $current = 0;
 
 for my $file (@files) {
     # Convert file path to module name
@@ -31,6 +34,10 @@ for my $file (@files) {
     $mod =~ s{\.pm$}{};
 
     $total++;
+    $current++;
+
+    # Progress indicator
+    print "\r\033[KTesting $mod ($current/$file_count)...";
 
     my $output = `perl -I"$koha_src" -I"$stubs_dir" -e "use $mod" 2>&1`;
 
@@ -47,6 +54,8 @@ for my $file (@files) {
         $failed{$mod} = 1;
     }
 }
+
+print "\r\033[K";  # Clear progress line
 
 print "=" x 60 . "\n";
 print "RESULTS: $ok / $total modules loaded successfully\n";

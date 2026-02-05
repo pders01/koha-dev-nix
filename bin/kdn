@@ -163,7 +163,13 @@ cmd_test() {
 
     info "Running full module test..."
     cd "$KDN_HOME"
-    nix develop $NIX_FLAGS -c perl t/test_all_modules.pl
+
+    # If already in nix shell, run directly; otherwise wrap in nix develop
+    if [ -n "$KOHA_DEV_NIX" ]; then
+        perl t/test_all_modules.pl
+    else
+        nix develop $NIX_FLAGS -c bash -c "export KOHA_SRC='$KOHA_SRC' && perl t/test_all_modules.pl"
+    fi
 }
 
 cmd_check() {
@@ -179,8 +185,16 @@ cmd_check() {
     cd "$KDN_HOME"
 
     local output
-    output=$(nix develop $NIX_FLAGS -c perl -I"$KDN_HOME/stubs" -I"$KOHA_SRC" -e "use $module; print \"OK\n\"" 2>&1)
-    local exit_code=$?
+    local exit_code
+
+    # If already in nix shell, run directly; otherwise wrap in nix develop
+    if [ -n "$KOHA_DEV_NIX" ]; then
+        output=$(perl -I"$KDN_HOME/stubs" -I"$KOHA_SRC" -e "use $module; print \"OK\n\"" 2>&1)
+        exit_code=$?
+    else
+        output=$(nix develop $NIX_FLAGS -c bash -c "export KOHA_SRC='$KOHA_SRC' && perl -I'$KDN_HOME/stubs' -I'$KOHA_SRC' -e 'use $module; print \"OK\n\"'" 2>&1)
+        exit_code=$?
+    fi
 
     if [ $exit_code -eq 0 ]; then
         success "OK: $module loaded successfully"
@@ -203,7 +217,13 @@ cmd_missing() {
 
     info "Finding missing dependencies..."
     cd "$KDN_HOME"
-    nix develop $NIX_FLAGS -c perl t/find_missing.pl
+
+    # If already in nix shell, run directly; otherwise wrap in nix develop
+    if [ -n "$KOHA_DEV_NIX" ]; then
+        perl t/find_missing.pl
+    else
+        nix develop $NIX_FLAGS -c bash -c "export KOHA_SRC='$KOHA_SRC' && perl t/find_missing.pl"
+    fi
 }
 
 cmd_code() {
@@ -211,7 +231,13 @@ cmd_code() {
 
     info "Opening VS Code in Koha directory..."
     cd "$KDN_HOME"
-    nix develop $NIX_FLAGS -c code "$KOHA_SRC"
+
+    # If already in nix shell, run directly; otherwise wrap in nix develop
+    if [ -n "$KOHA_DEV_NIX" ]; then
+        code "$KOHA_SRC"
+    else
+        nix develop $NIX_FLAGS -c code "$KOHA_SRC"
+    fi
 }
 
 cmd_nvim() {
@@ -219,7 +245,13 @@ cmd_nvim() {
 
     info "Opening Neovim in Koha directory..."
     cd "$KDN_HOME"
-    nix develop $NIX_FLAGS -c nvim "$KOHA_SRC"
+
+    # If already in nix shell, run directly; otherwise wrap in nix develop
+    if [ -n "$KOHA_DEV_NIX" ]; then
+        nvim "$KOHA_SRC"
+    else
+        nix develop $NIX_FLAGS -c nvim "$KOHA_SRC"
+    fi
 }
 
 cmd_zed() {
@@ -227,7 +259,13 @@ cmd_zed() {
 
     info "Opening Zed in Koha directory..."
     cd "$KDN_HOME"
-    nix develop $NIX_FLAGS -c zed "$KOHA_SRC"
+
+    # If already in nix shell, run directly; otherwise wrap in nix develop
+    if [ -n "$KOHA_DEV_NIX" ]; then
+        zed "$KOHA_SRC"
+    else
+        nix develop $NIX_FLAGS -c zed "$KOHA_SRC"
+    fi
 }
 
 cmd_status() {

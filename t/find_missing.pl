@@ -23,7 +23,12 @@ my @mods = qw(
   Koha::Plugins Koha::REST::V1
 );
 
+my $total = scalar(@mods);
+my $current = 0;
+
 for my $mod (@mods) {
+  $current++;
+  print "\r\033[KChecking $mod ($current/$total)...";
   my $output = `perl -I"$koha_src" -I"$stubs_dir" -e "use $mod" 2>&1`;
   while ($output =~ /Can't locate (\S+)\.pm/g) {
     my $m = $1;
@@ -32,4 +37,11 @@ for my $mod (@mods) {
   }
 }
 
-print "$_\n" for sort keys %missing;
+print "\r\033[K";  # Clear progress line
+
+if (%missing) {
+    print "Missing external modules:\n";
+    print "  $_\n" for sort keys %missing;
+} else {
+    print "No missing external modules found.\n";
+}
