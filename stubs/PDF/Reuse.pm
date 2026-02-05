@@ -5,20 +5,68 @@ use warnings;
 use Exporter 'import';
 
 our $VERSION = '999.0';
-our @EXPORT = qw(prFile prEnd prText prAdd prDoc prPage prForm prImage);
+our @EXPORT_OK = qw(
+    prAdd
+    prAltJpeg
+    prBookmark
+    prCompress
+    prDoc
+    prDocDir
+    prDocForm
+    prEnd
+    prExtract
+    prField
+    prFile
+    prFont
+    prFontSize
+    prForm
+    prGetLogBuffer
+    prGraphState
+    prImage
+    prInit
+    prInitVars
+    prJpeg
+    prJs
+    prLink
+    prLog
+    prLogDir
+    prMbox
+    prPage
+    prSinglePage
+    prStrWidth
+    prText
+    prTTFont
+);
 
-sub prFile { }
-sub prEnd { }
-sub prText { }
 sub prAdd { }
+sub prAltJpeg { }
+sub prBookmark { }
+sub prCompress { }
 sub prDoc { }
-sub prPage { }
-sub prForm { }
-sub prImage { }
+sub prDocDir { }
+sub prDocForm { }
+sub prEnd { }
+sub prExtract { }
+sub prField { }
+sub prFile { }
 sub prFont { }
 sub prFontSize { }
-sub prTTFont { }
-sub prCompress { }
+sub prForm { }
+sub prGetLogBuffer { }
+sub prGraphState { }
+sub prImage { }
+sub prInit { }
+sub prInitVars { }
+sub prJpeg { }
+sub prJs { }
+sub prLink { }
+sub prLog { }
+sub prLogDir { }
 sub prMbox { }
+sub prPage { }
+sub prSinglePage { }
+sub prStrWidth { 0 }
+sub prText { }
+sub prTTFont { }
 
 1;

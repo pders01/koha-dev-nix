@@ -2,13 +2,11 @@
 
 ## Current Status
 
-✅ **Working** - Core Koha modules load successfully for PerlNavigator LSP support.
+✅ **99.8% Working** - 1243/1245 Koha modules load successfully for PerlNavigator LSP support.
 
-Tested modules:
-- C4::Context, C4::Biblio, C4::Auth, C4::Circulation
-- C4::Items, C4::Members, C4::Reserves, C4::Search
-- Koha::Patrons, Koha::Items, Koha::Biblios
-- Koha::Database, Koha::Object, Koha::Objects
+2 modules fail due to compile-time config dependencies (unfixable with stubs):
+- C4::Auth_with_ldap - requires LDAP config in koha-conf.xml at compile time
+- C4::SIP::SIPServer - requires Log4perl config at compile time
 
 ## Stub Modules
 
@@ -22,15 +20,29 @@ These provide LSP/IDE support only - they have no actual functionality.
 | Algorithm::Munkres | Hungarian algorithm for optimal assignment |
 | Array::Utils | Array utility functions |
 | Auth::GoogleAuth | Google Authenticator TOTP |
+| Authen::CAS::Client | CAS authentication client |
+| Biblio::EndnoteStyle | Endnote style formatting |
 | DBIx::RunSQL | SQL file execution |
 | GD::Barcode::* | Barcode generation |
+| HTTP::OAI::* | OAI-PMH protocol (Repository, Record, ListRecords, etc.) |
 | JSON::Validator::Schema::OpenAPIv2 | OpenAPI validation |
+| Library::CallNumber::LC | Library of Congress call numbers |
 | Locale::Currency::Format | Currency formatting |
 | MARC::* | MARC bibliographic record handling |
+| Module::Bundled::Files | Access bundled files in modules |
 | Mojolicious::Plugin::OAuth2 | OAuth2 authentication |
 | Net::Stomp | STOMP messaging protocol |
 | Net::Z3950::ZOOM | Z39.50 protocol bindings |
+| Net::Z3950::SimpleServer | Z39.50 server implementation |
+| PDF::Reuse | PDF generation/manipulation |
+| PDF::Reuse::Barcode | Barcode generation in PDFs |
+| PDF::Table | Table generation in PDFs |
+| Schedule::At | Job scheduling |
+| Search::Elasticsearch::* | Elasticsearch client |
 | Struct::Diff | Structure comparison |
+| Text::Bidi | Bidirectional text handling |
+| UUID | UUID generation |
+| WebService::ILS::OverDrive::Patron | OverDrive API |
 | WWW::CSRF | CSRF protection |
 | ZOOM::* | Z39.50 client library |
 
