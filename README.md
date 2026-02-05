@@ -2,7 +2,7 @@
 
 Nix development environment for [Koha ILS](https://koha-community.org/) - provides Perl dependencies for PerlNavigator LSP support.
 
-**Status: 99.8% module coverage** (1243/1245 Koha modules load successfully)
+**Status: 99.8% module coverage** (1264/1266 Koha modules load successfully)
 
 ## Purpose
 
@@ -78,15 +78,19 @@ You should see:
 
 ```
 ╭─────────────────────────────────────────────╮
-│  Koha Development Environment               │
-│  Module coverage: 1243/1245 (99.8%)         │
+│  Koha Development Nix Environment           │
 ╰─────────────────────────────────────────────╯
 
-Commands:
-  koha-test        Run full module test
-  koha-check       Test specific module (e.g., koha-check C4::Biblio)
-  koha-missing     Find missing external dependencies
-  koha-stubs       List all stub modules
+Paths:
+  KDN_HOME:  /path/to/koha-dev-nix
+  KOHA_SRC:  /path/to/koha
+
+Koha:
+  Branch:    main
+  Commit:    abc1234
+  Status:    clean
+
+Module coverage: 1264/1266 (99.8%)
 ```
 
 ## Basic Usage
@@ -96,6 +100,8 @@ kdn shell                      # Enter dev shell
 kdn --branch 24.11 shell       # Switch to 24.11 branch and enter shell
 kdn test                       # Run full module test
 kdn check C4::Biblio           # Test specific module
+kdn missing                    # Find missing external dependencies
+kdn stubs                      # List all stub modules
 kdn status                     # Show environment status
 ```
 
@@ -122,7 +128,7 @@ Once inside `nix develop`:
 
 | Command | Description |
 |---------|-------------|
-| `koha-test` | Run the full module test suite (tests all 1245 modules) |
+| `koha-test` | Run the full module test suite (tests all 1266 modules) |
 | `koha-check C4::Biblio` | Test if a specific module loads |
 | `koha-missing` | Find missing external dependencies |
 | `koha-stubs` | List all stub modules |

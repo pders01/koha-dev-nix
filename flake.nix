@@ -237,7 +237,7 @@
             echo ""
             echo -e "''${CYAN}╭─────────────────────────────────────────────╮''${NC}"
             echo -e "''${CYAN}│''${NC}  ''${BOLD}Koha Development Environment''${NC}               ''${CYAN}│''${NC}"
-            echo -e "''${CYAN}│''${NC}  Module coverage: ''${GREEN}1243/1245 (99.8%)''${NC}         ''${CYAN}│''${NC}"
+            echo -e "''${CYAN}│''${NC}  Module coverage: ''${GREEN}1264/1266 (99.8%)''${NC}         ''${CYAN}│''${NC}"
             echo -e "''${CYAN}╰─────────────────────────────────────────────╯''${NC}"
             echo ""
             echo -e "''${BOLD}Commands:''${NC}"

@@ -299,7 +299,7 @@ cmd_status() {
         fi
     fi
     echo
-    echo -e "${BOLD}Module coverage:${NC} ${GREEN}1243/1245 (99.8%)${NC}"
+    echo -e "${BOLD}Module coverage:${NC} ${GREEN}1264/1266 (99.8%)${NC}"
     echo
 }
 
