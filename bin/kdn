@@ -16,9 +16,8 @@ CYAN='\033[0;36m'
 BOLD='\033[1m'
 NC='\033[0m'
 
-# Defaults
-KDN_HOME="${KDN_HOME:-$(cd "$(dirname "$0")/.." && pwd)}"
-KOHA_SRC="${KOHA_SRC:-$KDN_HOME/../koha}"
+# Defaults - reuse SYNC_REPO from ktd if available
+KOHA_SRC="${KOHA_SRC:-$SYNC_REPO}"
 KOHA_BRANCH=""
 NIX_FLAGS="--extra-experimental-features nix-command --extra-experimental-features flakes"
 
@@ -36,6 +35,8 @@ usage() {
     echo "    stubs               List all stub modules"
     echo "    missing             Find missing external dependencies"
     echo "    code                Open VS Code in the Koha directory"
+    echo "    nvim                Open Neovim in the Koha directory"
+    echo "    zed                 Open Zed in the Koha directory"
     echo "    status              Show environment status"
     echo "    help                Show this help message"
     echo ""
@@ -45,8 +46,9 @@ usage() {
     echo "    --help, -h          Show this help message"
     echo ""
     echo -e "${BOLD}Environment variables:${NC}"
-    echo "    KDN_HOME            Path to koha-dev-nix clone (auto-detected)"
-    echo "    KOHA_SRC            Path to Koha source (default: \$KDN_HOME/../koha)"
+    echo "    KDN_HOME            Path to koha-dev-nix clone (required)"
+    echo "    KOHA_SRC            Path to Koha source (required, or use SYNC_REPO)"
+    echo "    SYNC_REPO           Alternative to KOHA_SRC (for ktd users)"
     echo "    KOHA_BRANCH         Default branch to use"
     echo ""
     echo -e "${BOLD}Supported branches:${NC}"
@@ -61,6 +63,8 @@ usage() {
     echo "    kdn test                       # Run full module test"
     echo "    kdn check C4::Biblio           # Test specific module"
     echo "    kdn code                       # Open VS Code"
+    echo "    kdn nvim                       # Open Neovim"
+    echo "    kdn zed                        # Open Zed"
     echo ""
 }
 
@@ -86,6 +90,10 @@ check_requirements() {
         error "Nix is not installed. Visit https://nixos.org/download.html"
     fi
 
+    if [ -z "$KDN_HOME" ]; then
+        error "KDN_HOME is not set.\nAdd to your shell profile: export KDN_HOME=/path/to/koha-dev-nix"
+    fi
+
     if [ ! -d "$KDN_HOME" ]; then
         error "KDN_HOME ($KDN_HOME) does not exist"
     fi
@@ -94,8 +102,12 @@ check_requirements() {
         error "flake.nix not found in $KDN_HOME"
     fi
 
+    if [ -z "$KOHA_SRC" ]; then
+        error "KOHA_SRC (or SYNC_REPO) is not set.\nAdd to your shell profile: export KOHA_SRC=/path/to/koha"
+    fi
+
     if [ ! -d "$KOHA_SRC" ]; then
-        error "Koha source not found at $KOHA_SRC\nSet KOHA_SRC or use --koha-src"
+        error "Koha source not found at $KOHA_SRC"
     fi
 }
 
@@ -202,6 +214,22 @@ cmd_code() {
     nix develop $NIX_FLAGS -c code "$KOHA_SRC"
 }
 
+cmd_nvim() {
+    check_requirements
+
+    info "Opening Neovim in Koha directory..."
+    cd "$KDN_HOME"
+    nix develop $NIX_FLAGS -c nvim "$KOHA_SRC"
+}
+
+cmd_zed() {
+    check_requirements
+
+    info "Opening Zed in Koha directory..."
+    cd "$KDN_HOME"
+    nix develop $NIX_FLAGS -c zed "$KOHA_SRC"
+}
+
 cmd_status() {
     check_requirements
 
@@ -255,7 +283,7 @@ while [ $# -gt 0 ]; do
             KOHA_SRC="$2"
             shift 2
             ;;
-        shell|test|stubs|missing|code|status)
+        shell|test|stubs|missing|code|nvim|zed|status)
             COMMAND="$1"
             shift
             ;;
@@ -293,6 +321,12 @@ case "$COMMAND" in
         ;;
     code)
         cmd_code
+        ;;
+    nvim)
+        cmd_nvim
+        ;;
+    zed)
+        cmd_zed
         ;;
     status)
         cmd_status

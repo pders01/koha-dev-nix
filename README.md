@@ -19,20 +19,58 @@ It does **not** provide:
 - Database, Memcached, Elasticsearch
 - Apache/Plack web server
 
-## Quick Start
+## Setup
+
+It is not a bad idea to organize your projects in a directory. For the purpose
+of simplifying the instructions we will pick `~/git` as the place in which to
+put all the repository clones:
 
 ```bash
-# Clone next to your koha checkout
-cd ~/Projects
-git clone <this-repo> koha-dev-nix
-git clone <koha-repo> koha  # if not already present
+mkdir -p ~/git
+export PROJECTS_DIR=~/git
+```
 
-# Use the kdn wrapper (recommended)
-cd koha-dev-nix
-./bin/kdn shell
+### Clone the repositories
 
-# Or use nix directly
-nix develop --extra-experimental-features 'nix-command flakes'
+```bash
+cd $PROJECTS_DIR
+git clone https://gitlab.com/your-fork/koha-dev-nix.git koha-dev-nix
+```
+
+If you don't already have Koha cloned:
+
+```bash
+cd $PROJECTS_DIR
+git clone --branch main --single-branch --depth 1 \
+    https://git.koha-community.org/Koha-community/Koha.git koha
+```
+
+### Set environment variables
+
+For **bash** users:
+```bash
+echo "export PROJECTS_DIR=$PROJECTS_DIR" >> ~/.bashrc
+echo 'export KOHA_SRC=$PROJECTS_DIR/koha' >> ~/.bashrc
+echo 'export KDN_HOME=$PROJECTS_DIR/koha-dev-nix' >> ~/.bashrc
+echo 'export PATH=$PATH:$KDN_HOME/bin' >> ~/.bashrc
+source ~/.bashrc
+```
+
+For **zsh** users:
+```bash
+echo "export PROJECTS_DIR=$PROJECTS_DIR" >> ~/.zshenv
+echo 'export KOHA_SRC=$PROJECTS_DIR/koha' >> ~/.zshenv
+echo 'export KDN_HOME=$PROJECTS_DIR/koha-dev-nix' >> ~/.zshenv
+echo 'export PATH=$PATH:$KDN_HOME/bin' >> ~/.zshenv
+source ~/.zshenv
+```
+
+**Note for ktd users:** If you already have `SYNC_REPO` set, `kdn` will use it automatically. You only need to set `KDN_HOME` and add to PATH.
+
+### Verify setup
+
+```bash
+kdn status
 ```
 
 You should see:
@@ -50,9 +88,7 @@ Commands:
   koha-stubs       List all stub modules
 ```
 
-## The `kdn` Wrapper
-
-The `bin/kdn` script provides a convenient wrapper (similar to `ktd` for koha-testing-docker):
+## Basic Usage
 
 ```bash
 kdn shell                      # Enter dev shell
@@ -60,7 +96,14 @@ kdn --branch 24.11 shell       # Switch to 24.11 branch and enter shell
 kdn test                       # Run full module test
 kdn check C4::Biblio           # Test specific module
 kdn status                     # Show environment status
+```
+
+### Editor Integration
+
+```bash
 kdn code                       # Open VS Code in Koha directory
+kdn nvim                       # Open Neovim in Koha directory
+kdn zed                        # Open Zed in Koha directory
 ```
 
 ### Supported Branches
@@ -71,16 +114,6 @@ kdn code                       # Open VS Code in Koha directory
 | `25.11` | Upcoming release (November 2025) |
 | `25.05` | Current stable (May 2025) |
 | `24.11` | Previous stable (November 2024) |
-
-### Adding to PATH
-
-```bash
-# Add to your shell profile (~/.bashrc or ~/.zshrc)
-export PATH="$HOME/Projects/koha-dev-nix/bin:$PATH"
-
-# Now use from anywhere
-kdn shell
-```
 
 ## Shell Commands
 
@@ -187,9 +220,10 @@ Now the environment activates automatically when you `cd` into the directory.
 ## Directory Structure
 
 ```
-~/Projects/
-├── koha/              # Koha source code
-└── koha-dev-nix/      # This repo (must be sibling to koha/)
+$PROJECTS_DIR/
+├── koha/              # Koha source (KOHA_SRC)
+└── koha-dev-nix/      # This repo (KDN_HOME)
+    ├── bin/kdn        # CLI wrapper
     ├── flake.nix      # Nix flake with Perl dependencies
     ├── flake.lock     # Locked dependency versions
     ├── stubs/         # Stub modules for packages not in nixpkgs
@@ -198,6 +232,8 @@ Now the environment activates automatically when you `cd` into the directory.
     ├── TODO.md
     └── README.md
 ```
+
+**Note:** Koha and koha-dev-nix can be in different locations. Just set `KOHA_SRC` and `KDN_HOME` correctly.
 
 ## Adding Missing Modules
 

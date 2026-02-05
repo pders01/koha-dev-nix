@@ -188,12 +188,28 @@
           ] ++ nativeLibs;
 
           shellHook = ''
+            # Resolve KOHA_SRC - use SYNC_REPO if KOHA_SRC not set (ktd compatibility)
+            if [ -z "$KOHA_SRC" ] && [ -n "$SYNC_REPO" ]; then
+              export KOHA_SRC="$SYNC_REPO"
+            fi
+
+            if [ -z "$KOHA_SRC" ]; then
+              echo -e "\033[0;31mError: KOHA_SRC is not set.\033[0m"
+              echo "Add to your shell profile: export KOHA_SRC=/path/to/koha"
+              echo "Or if you use ktd: export KOHA_SRC=\$SYNC_REPO"
+              return 1
+            fi
+
+            if [ ! -d "$KOHA_SRC" ]; then
+              echo -e "\033[0;31mError: KOHA_SRC ($KOHA_SRC) does not exist.\033[0m"
+              return 1
+            fi
+
             # Add Koha source and stubs to PERL5LIB
-            export PERL5LIB="$PWD/stubs:$PWD/../koha:$PERL5LIB"
+            export PERL5LIB="$PWD/stubs:$KOHA_SRC:$PERL5LIB"
 
             # Store the dev directory for commands
             export KOHA_DEV_NIX="$PWD"
-            export KOHA_SRC="$PWD/../koha"
 
             # Colors
             RED='\033[0;31m'
