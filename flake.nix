@@ -120,6 +120,7 @@
           # Text/HTML
           TextCSV
           TextCSV_XS
+          TextCSVEncoded
           TextIconv
           HTMLParser
           HTMLScrubber
@@ -163,6 +164,12 @@
           # Net
           NetLDAP
           NetCIDR
+          NetNetmask
+          NetSFTPForeign
+
+          # Documents
+          OpenOfficeOODoc
+          ModuleCPANfile
 
           # Data
           DataICal
