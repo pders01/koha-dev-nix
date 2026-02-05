@@ -27,11 +27,11 @@ cd ~/Projects
 git clone <this-repo> koha-dev-nix
 git clone <koha-repo> koha  # if not already present
 
-# Enter the dev shell
+# Use the kdn wrapper (recommended)
 cd koha-dev-nix
-nix develop
+./bin/kdn shell
 
-# If flakes not enabled, use:
+# Or use nix directly
 nix develop --extra-experimental-features 'nix-command flakes'
 ```
 
@@ -48,6 +48,38 @@ Commands:
   koha-check       Test specific module (e.g., koha-check C4::Biblio)
   koha-missing     Find missing external dependencies
   koha-stubs       List all stub modules
+```
+
+## The `kdn` Wrapper
+
+The `bin/kdn` script provides a convenient wrapper (similar to `ktd` for koha-testing-docker):
+
+```bash
+kdn shell                      # Enter dev shell
+kdn --branch 24.11 shell       # Switch to 24.11 branch and enter shell
+kdn test                       # Run full module test
+kdn check C4::Biblio           # Test specific module
+kdn status                     # Show environment status
+kdn code                       # Open VS Code in Koha directory
+```
+
+### Supported Branches
+
+| Branch | Description |
+|--------|-------------|
+| `main` | Main development branch |
+| `25.11` | Upcoming release (November 2025) |
+| `25.05` | Current stable (May 2025) |
+| `24.11` | Previous stable (November 2024) |
+
+### Adding to PATH
+
+```bash
+# Add to your shell profile (~/.bashrc or ~/.zshrc)
+export PATH="$HOME/Projects/koha-dev-nix/bin:$PATH"
+
+# Now use from anywhere
+kdn shell
 ```
 
 ## Shell Commands
@@ -95,7 +127,6 @@ koha-check Koha::REST::V1
 ### Neovim with nvim-lspconfig
 
 ```lua
--- In your LSP config
 require('lspconfig').perlnavigator.setup{
   cmd = { "perlnavigator" },
   settings = {
@@ -106,7 +137,30 @@ require('lspconfig').perlnavigator.setup{
 }
 ```
 
-**Important**: Start Neovim from within the `nix develop` shell so `perlnavigator` is in PATH.
+**Important**: Start Neovim from within `kdn shell` so `perlnavigator` is in PATH.
+
+### Zed
+
+Zed has built-in PerlNavigator support. Start Zed from within the shell:
+
+```bash
+kdn shell
+zed ../koha
+```
+
+Or configure Zed to use the nix environment in `settings.json`:
+
+```json
+{
+  "lsp": {
+    "perlnavigator": {
+      "binary": {
+        "path": "perlnavigator"
+      }
+    }
+  }
+}
+```
 
 ### Emacs with eglot/lsp-mode
 
