@@ -189,6 +189,12 @@
           buildInputs = [
             perlEnv
             pkgs.perlnavigator
+
+            # Frontend development
+            pkgs.nodejs_20
+            pkgs.yarn
+            pkgs.nodePackages.typescript
+            pkgs.nodePackages.typescript-language-server
           ] ++ nativeLibs;
 
           shellHook = ''
@@ -236,6 +242,7 @@
             echo -e "  ''${YELLOW}koha-check''${NC}       Test specific module (e.g., koha-check C4::Biblio)"
             echo -e "  ''${YELLOW}koha-missing''${NC}     Find missing external dependencies"
             echo -e "  ''${YELLOW}koha-stubs''${NC}       List all stub modules"
+            echo -e "  ''${YELLOW}koha-yarn''${NC}        Run yarn in Koha directory (e.g., koha-yarn build)"
             echo ""
 
             # Shell functions
@@ -273,7 +280,11 @@
               find "$KOHA_DEV_NIX/stubs" -name "*.pm" | sed "s|$KOHA_DEV_NIX/stubs/||" | sed 's|/|::|g' | sed 's|\.pm$||' | sort
             }
 
-            export -f koha-test koha-check koha-missing koha-stubs
+            koha-yarn() {
+              cd "$KOHA_SRC" && yarn "$@"
+            }
+
+            export -f koha-test koha-check koha-missing koha-stubs koha-yarn
 
             # Custom prompt (bash/zsh compatible)
             if [ -n "$BASH_VERSION" ]; then
