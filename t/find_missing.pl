@@ -5,9 +5,9 @@ use FindBin qw($RealBin);
 
 my %missing;
 
-# Use KOHA_SRC env var or default to ../koha relative to script location
-my $koha_src = $ENV{KOHA_SRC} || "$RealBin/../koha";
-my $stubs_dir = "$RealBin/stubs";
+# Use KOHA_SRC env var (required)
+my $koha_src = $ENV{KOHA_SRC} or die "KOHA_SRC environment variable is not set\n";
+my $stubs_dir = "$RealBin/../stubs";
 
 die "Koha source not found at $koha_src\n" unless -d "$koha_src/Koha";
 

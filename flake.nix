@@ -237,7 +237,7 @@
             # Shell functions
             koha-test() {
               echo -e "''${BLUE}Running full module test...''${NC}"
-              cd "$KOHA_DEV_NIX" && perl test_all_modules.pl
+              cd "$KOHA_DEV_NIX" && perl t/test_all_modules.pl
             }
 
             koha-check() {
@@ -261,7 +261,7 @@
 
             koha-missing() {
               echo -e "''${BLUE}Finding missing dependencies...''${NC}"
-              cd "$KOHA_DEV_NIX" && perl find_missing.pl
+              cd "$KOHA_DEV_NIX" && perl t/find_missing.pl
             }
 
             koha-stubs() {

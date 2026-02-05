@@ -163,7 +163,7 @@ cmd_test() {
 
     info "Running full module test..."
     cd "$KDN_HOME"
-    nix develop $NIX_FLAGS -c perl test_all_modules.pl
+    nix develop $NIX_FLAGS -c perl t/test_all_modules.pl
 }
 
 cmd_check() {
@@ -203,7 +203,7 @@ cmd_missing() {
 
     info "Finding missing dependencies..."
     cd "$KDN_HOME"
-    nix develop $NIX_FLAGS -c perl find_missing.pl
+    nix develop $NIX_FLAGS -c perl t/find_missing.pl
 }
 
 cmd_code() {

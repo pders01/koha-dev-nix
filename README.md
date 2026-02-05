@@ -227,8 +227,7 @@ $PROJECTS_DIR/
     ├── flake.nix      # Nix flake with Perl dependencies
     ├── flake.lock     # Locked dependency versions
     ├── stubs/         # Stub modules for packages not in nixpkgs
-    ├── test_all_modules.pl
-    ├── find_missing.pl
+    ├── t/             # Test scripts
     ├── TODO.md
     └── README.md
 ```
