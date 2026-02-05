@@ -137,6 +137,10 @@
           TestMockModule
           TestMockObject
 
+          # Code quality
+          PerlTidy
+          PerlCritic
+
           # Utilities
           ListMoreUtils
           FileSlurp
